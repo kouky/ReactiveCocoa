@@ -168,7 +168,7 @@ typedef RACStream * (^RACStreamBindBlock)(id value, BOOL *stop);
 ///               return value must be an object. This argument cannot be nil.
 ///
 /// Returns a new stream of reduced tuple values.
-- (instancetype)reduceEach:(id (^)())reduceBlock;
+- (instancetype)reduceEach:(id (^)(void))reduceBlock;
 
 /// Returns a stream consisting of `value`, followed by the values in the
 /// receiver.
@@ -213,13 +213,13 @@ typedef RACStream * (^RACStreamBindBlock)(id value, BOOL *stop);
 ///
 /// Example:
 ///
-///   [RACStream zip:@[ stringSignal, intSignal ] reduce:^(NSString *string, NSNumber *number) {
+///   [RACStream zip:@[ stringSignal, intSignal ] reduce:(id)^(NSString *string, NSNumber *number) {
 ///       return [NSString stringWithFormat:@"%@: %@", string, number];
 ///   }];
 ///
 /// Returns a new stream containing the results from each invocation of
 /// `reduceBlock`.
-+ (instancetype)zip:(id<NSFastEnumeration>)streams reduce:(id (^)())reduceBlock;
++ (instancetype)zip:(id<NSFastEnumeration>)streams reduce:(id (^)(void))reduceBlock;
 
 /// Returns a stream obtained by concatenating `streams` in order.
 + (instancetype)concat:(id<NSFastEnumeration>)streams;
@@ -246,7 +246,7 @@ typedef RACStream * (^RACStreamBindBlock)(id value, BOOL *stop);
 ///      RACSequence *numbers = @[ @1, @2, @3, @4 ].rac_sequence;
 ///
 ///      // Contains 1, 3, 6, 10
-///      RACSequence *sums = [numbers scanWithStart:@0 reduce:^(NSNumber *sum, NSNumber *next) {
+///      RACSequence *sums = [numbers scanWithStart:@0 reduce:(id)^(NSNumber *sum, NSNumber *next) {
 ///          return @(sum.integerValue + next.integerValue);
 ///      }];
 ///
@@ -284,7 +284,7 @@ typedef RACStream * (^RACStreamBindBlock)(id value, BOOL *stop);
 ///      RACSequence *numbers = @[ @1, @2, @3, @4 ].rac_sequence;
 ///
 ///      // Contains 1, 3, 5, 7
-///      RACSequence *sums = [numbers combinePreviousWithStart:@0 reduce:^(NSNumber *previous, NSNumber *next) {
+///      RACSequence *sums = [numbers combinePreviousWithStart:@0 reduce:(id)^(NSNumber *previous, NSNumber *next) {
 ///          return @(previous.integerValue + next.integerValue);
 ///      }];
 ///

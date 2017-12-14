@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACSequenceExamples.h"
 
@@ -69,7 +70,7 @@ qck_describe(@"NSArray sequences", ^{
 	qck_it(@"should fast enumerate after zipping", ^{
 		// This certain list of values causes issues, for some reason.
 		NSArray *values = @[ @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0, @0 ];
-		RACSequence *zippedSequence = [RACSequence zip:@[ values.rac_sequence, values.rac_sequence ] reduce:^(id obj1, id obj2) {
+		RACSequence *zippedSequence = [RACSequence zip:@[ values.rac_sequence, values.rac_sequence ] reduce:(id)^(id obj1, id obj2) {
 			return obj1;
 		}];
 

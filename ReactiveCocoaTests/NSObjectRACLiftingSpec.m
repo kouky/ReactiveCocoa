@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACTestObject.h"
 
@@ -366,7 +367,7 @@ qck_describe(@"-rac_liftSelector:withSignalsFromArray:", ^{
 			}];
 
 			[subject sendNext:testBlock];
-			expect(result).notTo(beNil());
+			expect((id)result).notTo(beNil());
 
 			result();
 			expect(@(blockInvoked)).to(beTruthy());

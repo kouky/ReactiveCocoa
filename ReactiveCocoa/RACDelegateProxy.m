@@ -61,7 +61,7 @@
 		if (methodDescription.name == NULL) return [super methodSignatureForSelector:selector];
 	}
 
-	return [NSMethodSignature signatureWithObjCTypes:methodDescription.types];
+	return [NSMethodSignature signatureWithObjCTypes:(const char * _Nonnull)methodDescription.types];
 }
 
 - (BOOL)respondsToSelector:(SEL)selector {

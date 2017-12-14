@@ -39,7 +39,7 @@ static void RACUseDelegateProxy(UIImagePickerController *self) {
 		
 	RACSignal *imagePickerSignal = [[[[self.rac_delegateProxy
 		signalForSelector:@selector(imagePickerController:didFinishPickingMediaWithInfo:)]
-		reduceEach:^(UIImagePickerController *pickerController, NSDictionary *userInfo) {
+		reduceEach:(id)^(UIImagePickerController *pickerController, NSDictionary *userInfo) {
 			return userInfo;
 		}]
 		takeUntil:pickerCancelledSignal]

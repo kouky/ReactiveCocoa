@@ -58,7 +58,7 @@
 }
 
 - (id)foldRightWithStart:(id)start reduce:(id (^)(id, RACSequence *rest))reduce {
-	return [super foldRightWithStart:start reduce:^(id first, RACSequence *rest) {
+	return [super foldRightWithStart:start reduce:(id)^(id first, RACSequence *rest) {
 		return reduce(first, rest.eagerSequence);
 	}];
 }

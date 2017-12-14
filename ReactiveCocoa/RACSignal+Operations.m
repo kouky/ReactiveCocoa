@@ -320,7 +320,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 		RACSerialDisposable *timerDisposable = [[RACSerialDisposable alloc] init];
 		NSMutableArray *values = [NSMutableArray array];
 
-		void (^flushValues)() = ^{
+        void (^flushValues)(void) = ^{
 			@synchronized (values) {
 				[timerDisposable.disposable dispose];
 
@@ -357,7 +357,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 - (RACSignal *)collect {
 	return [[self aggregateWithStartFactory:^{
 		return [[NSMutableArray alloc] init];
-	} reduce:^(NSMutableArray *collectedValues, id x) {
+	} reduce:(id)^(NSMutableArray *collectedValues, id x) {
 		[collectedValues addObject:(x ?: NSNull.null)];
 		return collectedValues;
 	}] setNameWithFormat:@"[%@] -collect", self.name];
@@ -445,7 +445,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 	}] setNameWithFormat:@"+combineLatest: %@", signals];
 }
 
-+ (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)())reduceBlock {
++ (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)(void))reduceBlock {
 	NSCParameterAssert(reduceBlock != nil);
 
 	RACSignal *result = [self combineLatest:signals];
@@ -1337,7 +1337,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 			[currentWindow sendCompleted];
 			currentWindow = nil;
 			currentCloseWindow = nil;
-			[closeObserverDisposable dispose], closeObserverDisposable = nil;
+            (void)([closeObserverDisposable dispose]), closeObserverDisposable = nil;
 		};
 
 		RACDisposable *openObserverDisposable = [openSignal subscribe:[RACSubscriber subscriberWithNext:^(id x) {

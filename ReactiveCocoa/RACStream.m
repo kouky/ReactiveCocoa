@@ -106,7 +106,7 @@
 	NSCParameterAssert(reduceBlock != NULL);
 	return [[[self
 		scanWithStart:RACTuplePack(start)
-		reduce:^(RACTuple *previousTuple, id next) {
+		reduce:(id)^(RACTuple *previousTuple, id next) {
 			id value = reduceBlock(previousTuple[0], next);
 			return RACTuplePack(next, value);
 		}]
@@ -136,7 +136,7 @@
 	}] setNameWithFormat:@"[%@] -ignore: %@", self.name, [value rac_description]];
 }
 
-- (instancetype)reduceEach:(id (^)())reduceBlock {
+- (instancetype)reduceEach:(id (^)(void))reduceBlock {
 	NSCParameterAssert(reduceBlock != nil);
 
 	__weak RACStream *stream __attribute__((unused)) = self;
@@ -231,7 +231,7 @@
 	}] setNameWithFormat:@"+zip: %@", streams];
 }
 
-+ (instancetype)zip:(id<NSFastEnumeration>)streams reduce:(id (^)())reduceBlock {
++ (instancetype)zip:(id<NSFastEnumeration>)streams reduce:(id (^)(void))reduceBlock {
 	NSCParameterAssert(reduceBlock != nil);
 
 	RACStream *result = [self zip:streams];

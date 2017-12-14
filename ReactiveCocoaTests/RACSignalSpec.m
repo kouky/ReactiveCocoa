@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACPropertySignalExamples.h"
 #import "RACSequenceExamples.h"
@@ -1101,7 +1102,7 @@ qck_describe(@"+combineLatest:reduce:", ^{
 		__block id receivedVal2;
 		__block id receivedVal3;
 
-		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject3 ] reduce:^ id (id val1, id val2, id val3) {
+		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject3 ] reduce:(id)^ id (id val1, id val2, id val3) {
 			receivedVal1 = val1;
 			receivedVal2 = val2;
 			receivedVal3 = val3;
@@ -1124,7 +1125,7 @@ qck_describe(@"+combineLatest:reduce:", ^{
 	});
 
 	qck_it(@"should send the return result of the reduce block", ^{
-		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject3 ] reduce:^(NSString *string1, NSString *string2, NSString *string3) {
+		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject3 ] reduce:(id)^(NSString *string1, NSString *string2, NSString *string3) {
 			return [NSString stringWithFormat:@"%@: %@%@", string1, string2, string3];
 		}];
 
@@ -1141,7 +1142,7 @@ qck_describe(@"+combineLatest:reduce:", ^{
 	});
 
 	qck_it(@"should handle multiples of the same signals", ^{
-		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject1, subject3 ] reduce:^(NSString *string1, NSString *string2, NSString *string3, NSString *string4) {
+		RACSignal *combined = [RACSignal combineLatest:@[ subject1, subject2, subject1, subject3 ] reduce:(id)^(NSString *string1, NSString *string2, NSString *string3, NSString *string4) {
 			return [NSString stringWithFormat:@"%@ : %@ = %@ : %@", string1, string2, string3, string4];
 		}];
 
@@ -1172,7 +1173,7 @@ qck_describe(@"+combineLatest:reduce:", ^{
 			return nil;
 		}];
 
-		RACSignal *combined = [RACSignal combineLatest:@[ sideEffectingSignal, sideEffectingSignal, sideEffectingSignal ] reduce:^(id x, id y, id z) {
+		RACSignal *combined = [RACSignal combineLatest:@[ sideEffectingSignal, sideEffectingSignal, sideEffectingSignal ] reduce:(id)^(id x, id y, id z) {
 			return [NSString stringWithFormat:@"%@%@%@", x, y, z];
 		}];
 
@@ -3047,7 +3048,7 @@ qck_describe(@"+zip:", ^{
 		NSMutableArray *receivedValues = NSMutableArray.array;
 		NSArray *expectedValues = nil;
 
-		[[RACSignal zip:@[ a, b, c ] reduce:^(NSNumber *a, NSNumber *b, NSNumber *c) {
+		[[RACSignal zip:@[ a, b, c ] reduce:(id)^(NSNumber *a, NSNumber *b, NSNumber *c) {
 			return [NSString stringWithFormat:@"%@%@%@", a, b, c];
 		}] subscribeNext:^(id x) {
 			[receivedValues addObject:x];
@@ -3126,7 +3127,7 @@ qck_describe(@"+zip:", ^{
 			[subscriber sendCompleted];
 			return nil;
 		}];
-		RACSignal *combined = [RACSignal zip:@[ sideEffectingSignal, sideEffectingSignal ] reduce:^ NSString * (id x, id y) {
+		RACSignal *combined = [RACSignal zip:@[ sideEffectingSignal, sideEffectingSignal ] reduce:(id)^ NSString * (id x, id y) {
 			return [NSString stringWithFormat:@"%@%@", x, y];
 		}];
 		NSMutableArray *receivedValues = NSMutableArray.array;

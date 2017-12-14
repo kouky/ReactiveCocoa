@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "NSObjectRACPropertySubscribingExamples.h"
 #import "RACTestObject.h"
@@ -39,7 +40,7 @@ qck_describe(@"+rac_signalWithChangesFor:keyPath:options:observer:", ^{
 			object = [[RACTestObject alloc] init];
 
 			objectValueSignal = ^(NSKeyValueObservingOptions options) {
-				return [[object rac_valuesAndChangesForKeyPath:@keypath(object, objectValue) options:options observer:self] reduceEach:^(id value, NSDictionary *change) {
+				return [[object rac_valuesAndChangesForKeyPath:@keypath(object, objectValue) options:options observer:self] reduceEach:(id)^(id value, NSDictionary *change) {
 					return change;
 				}];
 			};

@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACSequenceExamples.h"
 #import "RACStreamExamples.h"
@@ -322,7 +323,7 @@ qck_it(@"shouldn't overflow the stack when deallocated on a background queue", ^
 qck_describe(@"-foldLeftWithStart:reduce:", ^{
 	qck_it(@"should reduce with start first", ^{
 		RACSequence *sequence = [[[RACSequence return:@0] concat:[RACSequence return:@1]] concat:[RACSequence return:@2]];
-		NSNumber *result = [sequence foldLeftWithStart:@3 reduce:^(NSNumber *first, NSNumber *rest) {
+		NSNumber *result = [sequence foldLeftWithStart:@3 reduce:(id)^(NSNumber *first, NSNumber *rest) {
 			return first;
 		}];
 		expect(result).to(equal(@3));
@@ -330,7 +331,7 @@ qck_describe(@"-foldLeftWithStart:reduce:", ^{
 
 	qck_it(@"should be left associative", ^{
 		RACSequence *sequence = [[[RACSequence return:@1] concat:[RACSequence return:@2]] concat:[RACSequence return:@3]];
-		NSNumber *result = [sequence foldLeftWithStart:@0 reduce:^(NSNumber *first, NSNumber *rest) {
+		NSNumber *result = [sequence foldLeftWithStart:@0 reduce:(id)^(NSNumber *first, NSNumber *rest) {
 			int difference = first.intValue - rest.intValue;
 			return @(difference);
 		}];
@@ -350,7 +351,7 @@ qck_describe(@"-foldRightWithStart:reduce:", ^{
 			return [RACSequence return:@1];
 		}];
 		
-		NSNumber *result = [sequence foldRightWithStart:@2 reduce:^(NSNumber *first, RACSequence *rest) {
+		NSNumber *result = [sequence foldRightWithStart:@2 reduce:(id)^(NSNumber *first, RACSequence *rest) {
 			return first;
 		}];
 		
@@ -361,7 +362,7 @@ qck_describe(@"-foldRightWithStart:reduce:", ^{
 	
 	qck_it(@"should reduce with start last", ^{
 		RACSequence *sequence = [[[RACSequence return:@0] concat:[RACSequence return:@1]] concat:[RACSequence return:@2]];
-		NSNumber *result = [sequence foldRightWithStart:@3 reduce:^(NSNumber *first, RACSequence *rest) {
+		NSNumber *result = [sequence foldRightWithStart:@3 reduce:(id)^(NSNumber *first, RACSequence *rest) {
 			return rest.head;
 		}];
 		expect(result).to(equal(@3));
@@ -369,7 +370,7 @@ qck_describe(@"-foldRightWithStart:reduce:", ^{
 	
 	qck_it(@"should be right associative", ^{
 		RACSequence *sequence = [[[RACSequence return:@1] concat:[RACSequence return:@2]] concat:[RACSequence return:@3]];
-		NSNumber *result = [sequence foldRightWithStart:@0 reduce:^(NSNumber *first, RACSequence *rest) {
+		NSNumber *result = [sequence foldRightWithStart:@0 reduce:(id)^(NSNumber *first, RACSequence *rest) {
 			int difference = first.intValue - [rest.head intValue];
 			return @(difference);
 		}];

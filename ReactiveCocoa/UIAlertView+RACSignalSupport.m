@@ -35,7 +35,7 @@ static void RACUseDelegateProxy(UIAlertView *self) {
 - (RACSignal *)rac_buttonClickedSignal {
 	RACSignal *signal = [[[[self.rac_delegateProxy
 		signalForSelector:@selector(alertView:clickedButtonAtIndex:)]
-		reduceEach:^(UIAlertView *alertView, NSNumber *buttonIndex) {
+		reduceEach:(id)^(UIAlertView *alertView, NSNumber *buttonIndex) {
 			return buttonIndex;
 		}]
 		takeUntil:self.rac_willDeallocSignal]
@@ -49,7 +49,7 @@ static void RACUseDelegateProxy(UIAlertView *self) {
 - (RACSignal *)rac_willDismissSignal {
 	RACSignal *signal = [[[[self.rac_delegateProxy
 		signalForSelector:@selector(alertView:willDismissWithButtonIndex:)]
-		reduceEach:^(UIAlertView *alertView, NSNumber *buttonIndex) {
+		reduceEach:(id)^(UIAlertView *alertView, NSNumber *buttonIndex) {
 			return buttonIndex;
 		}]
 		takeUntil:self.rac_willDeallocSignal]
