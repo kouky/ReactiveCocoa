@@ -42,7 +42,7 @@ static void RACUseDelegateProxy(UITextView *self) {
 			return [RACSignal return:RACTuplePack(self)];
 		}]
 		concat:[self.rac_delegateProxy signalForSelector:@selector(textViewDidChange:)]]
-		reduceEach:^(UITextView *x) {
+		reduceEach:(id)^(UITextView *x) {
 			return x.text;
 		}]
 		takeUntil:self.rac_willDeallocSignal]

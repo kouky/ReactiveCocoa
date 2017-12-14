@@ -41,7 +41,7 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
 			if (originalDealloc == NULL) {
 				struct objc_super superInfo = {
 					.receiver = self,
-					.super_class = class_getSuperclass(classToSwizzle)
+					.super_class = (Class _Nonnull)class_getSuperclass(classToSwizzle)
 				};
 
 				void (*msgSend)(struct objc_super *, SEL) = (__typeof__(msgSend))objc_msgSendSuper;

@@ -186,13 +186,13 @@ extern const NSInteger RACSignalErrorNoMatchingCase;
 ///
 /// Example:
 ///
-///   [RACSignal combineLatest:@[ stringSignal, intSignal ] reduce:^(NSString *string, NSNumber *number) {
+///   [RACSignal combineLatest:@[ stringSignal, intSignal ] reduce:(id)^(NSString *string, NSNumber *number) {
 ///       return [NSString stringWithFormat:@"%@: %@", string, number];
 ///   }];
 ///
 /// Returns a signal which sends the results from each invocation of
 /// `reduceBlock`.
-+ (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)())reduceBlock;
++ (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals reduce:(id (^)(void))reduceBlock;
 
 /// Merges the receiver and the given signal with `+merge:` and returns the
 /// resulting signal.

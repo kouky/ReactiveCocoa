@@ -44,7 +44,7 @@
 
 	BOOL shouldAddDeallocObserver = NO;
 
-	objc_property_t property = class_getProperty(object_getClass(self), keyPathHead.UTF8String);
+	objc_property_t property = class_getProperty(object_getClass(self), (const char * _Nonnull)keyPathHead.UTF8String);
 	if (property != NULL) {
 		rac_propertyAttributes *attributes = rac_copyPropertyAttributes(property);
 		if (attributes != NULL) {
@@ -54,7 +54,7 @@
 
 			BOOL isObject = attributes->objectClass != nil || strstr(attributes->type, @encode(id)) == attributes->type;
 			BOOL isProtocol = attributes->objectClass == NSClassFromString(@"Protocol");
-			BOOL isBlock = strcmp(attributes->type, @encode(void(^)())) == 0;
+            BOOL isBlock = strcmp(attributes->type, @encode(void(^)(void))) == 0;
 			BOOL isWeak = attributes->weak;
 
 			// If this property isn't actually an object (or is a Class object),

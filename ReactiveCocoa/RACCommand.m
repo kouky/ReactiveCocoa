@@ -138,7 +138,7 @@ const NSInteger RACCommandErrorNotEnabled = 1;
 	// A signal of additions to `activeExecutionSignals`.
 	RACSignal *newActiveExecutionSignals = [[[[[self
 		rac_valuesAndChangesForKeyPath:@keypath(self.activeExecutionSignals) options:NSKeyValueObservingOptionNew observer:nil]
-		reduceEach:^(id _, NSDictionary *change) {
+		reduceEach:(id)^(id _, NSDictionary *change) {
 			NSArray *signals = change[NSKeyValueChangeNewKey];
 			if (signals == nil) return [RACSignal empty];
 

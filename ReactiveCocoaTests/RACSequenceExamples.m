@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACSequenceExamples.h"
 
@@ -112,14 +113,14 @@ QuickConfigurationBegin(RACSequenceExampleGroups)
 		});
 
 		qck_it(@"should fold right", ^{
-			RACSequence *result = [sequence foldRightWithStart:[RACSequence empty] reduce:^(id first, RACSequence *rest) {
+			RACSequence *result = [sequence foldRightWithStart:[RACSequence empty] reduce:(id)^(id first, RACSequence *rest) {
 				return [rest.head startWith:first];
 			}];
 			expect(result.array).to(equal(values));
 		});
 
 		qck_it(@"should fold left", ^{
-			RACSequence *result = [sequence foldLeftWithStart:[RACSequence empty] reduce:^(RACSequence *first, id rest) {
+			RACSequence *result = [sequence foldLeftWithStart:[RACSequence empty] reduce:(id)^(RACSequence *first, id rest) {
 				return [first concat:[RACSequence return:rest]];
 			}];
 			expect(result.array).to(equal(values));

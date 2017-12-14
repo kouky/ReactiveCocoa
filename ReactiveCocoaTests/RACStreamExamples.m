@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACStreamExamples.h"
 
@@ -178,7 +179,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 				// Just so +zip:reduce: thinks this is a unique stream.
 				RACStream *anotherStream = [[streamClass empty] concat:countingStream];
 
-				RACStream *zipped = [streamClass zip:@[ countingStream, anotherStream ] reduce:^(NSNumber *v1, NSNumber *v2) {
+				RACStream *zipped = [streamClass zip:@[ countingStream, anotherStream ] reduce:(id)^(NSNumber *v1, NSNumber *v2) {
 					return @(v1.integerValue + v2.integerValue);
 				}];
 
@@ -412,7 +413,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 
 			qck_describe(@"+zip:reduce:", ^{
 				qck_it(@"should reduce values", ^{
-					RACStream *stream = [streamClass zip:threeStreams reduce:^ NSString * (id x, id y, id z) {
+					RACStream *stream = [streamClass zip:threeStreams reduce:(id)^ NSString * (id x, id y, id z) {
 						return [NSString stringWithFormat:@"%@ %@ %@", x, y, z];
 					}];
 					verifyValues(stream, @[ @"Ada eats fish", @"Bob cooks bear", @"Dea jumps rock" ]);
@@ -421,7 +422,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 				qck_it(@"should truncate streams", ^{
 					RACStream *shortStream = streamWithValues(@[ @"now", @"later" ]);
 					NSArray *streams = [threeStreams arrayByAddingObject:shortStream];
-					RACStream *stream = [streamClass zip:streams reduce:^ NSString * (id w, id x, id y, id z) {
+					RACStream *stream = [streamClass zip:streams reduce:(id)^ NSString * (id w, id x, id y, id z) {
 						return [NSString stringWithFormat:@"%@ %@ %@ %@", w, x, y, z];
 					}];
 					verifyValues(stream, @[ @"Ada eats fish now", @"Bob cooks bear later" ]);
@@ -429,7 +430,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 
 				qck_it(@"should work on infinite streams", ^{
 					NSArray *streams = [threeStreams arrayByAddingObject:infiniteStream];
-					RACStream *stream = [streamClass zip:streams reduce:^ NSString * (id w, id x, id y, id z) {
+					RACStream *stream = [streamClass zip:streams reduce:(id)^ NSString * (id w, id x, id y, id z) {
 						return [NSString stringWithFormat:@"%@ %@ %@", w, x, y];
 					}];
 					verifyValues(stream, @[ @"Ada eats fish", @"Bob cooks bear", @"Dea jumps rock" ]);
@@ -437,7 +438,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 
 				qck_it(@"should handle multiples of the same stream", ^{
 					NSArray *streams = @[ streamOne, streamOne, streamTwo, streamThree, streamTwo, streamThree ];
-					RACStream *stream = [streamClass zip:streams reduce:^ NSString * (id x1, id x2, id y1, id z1, id y2, id z2) {
+					RACStream *stream = [streamClass zip:streams reduce:(id)^ NSString * (id x1, id x2, id y1, id z1, id y2, id z2) {
 						return [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@", x1, x2, y1, z1, y2, z2];
 					}];
 					verifyValues(stream, @[ @"Ada Ada eats fish eats fish", @"Bob Bob cooks bear cooks bear", @"Dea Dea jumps rock jumps rock" ]);
@@ -510,7 +511,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 			});
 
 			qck_it(@"should scan", ^{
-				RACStream *scanned = [stream scanWithStart:@0 reduce:^(NSNumber *running, NSNumber *next) {
+				RACStream *scanned = [stream scanWithStart:@0 reduce:(id)^(NSNumber *running, NSNumber *next) {
 					return @(running.integerValue + next.integerValue);
 				}];
 
@@ -568,7 +569,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 			});
 
 			qck_it(@"should terminate an infinite stream", ^{
-				RACStream *infiniteCounter = [infiniteStream scanWithStart:@0 reduce:^(NSNumber *running, id _) {
+				RACStream *infiniteCounter = [infiniteStream scanWithStart:@0 reduce:(id)^(NSNumber *running, id _) {
 					return @(running.unsignedIntegerValue + 1);
 				}];
 
@@ -631,7 +632,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 
 			qck_it(@"should pass the previous next into the reduce block", ^{
 				NSMutableArray *previouses = [NSMutableArray array];
-				RACStream *mapped = [stream combinePreviousWithStart:nil reduce:^(id previous, id next) {
+				RACStream *mapped = [stream combinePreviousWithStart:nil reduce:(id)^(id previous, id next) {
 					[previouses addObject:previous ?: RACTupleNil.tupleNil];
 					return next;
 				}];
@@ -643,7 +644,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 			});
 
 			qck_it(@"should send the combined value", ^{
-				RACStream *mapped = [stream combinePreviousWithStart:@1 reduce:^(NSNumber *previous, NSNumber *next) {
+				RACStream *mapped = [stream combinePreviousWithStart:@1 reduce:(id)^(NSNumber *previous, NSNumber *next) {
 					return [NSString stringWithFormat:@"%lu - %lu", (unsigned long)previous.unsignedIntegerValue, (unsigned long)next.unsignedIntegerValue];
 				}];
 
@@ -658,7 +659,7 @@ QuickConfigurationBegin(RACStreamExampleGroups)
 				RACTuplePack(@"", @"_")
 			]);
 
-			RACStream *reduced = [stream reduceEach:^(NSString *a, NSString *b) {
+			RACStream *reduced = [stream reduceEach:(id)^(NSString *a, NSString *b) {
 				return [a stringByAppendingString:b];
 			}];
 

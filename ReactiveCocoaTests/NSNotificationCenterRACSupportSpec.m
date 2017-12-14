@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "NSNotificationCenter+RACSupport.h"
 #import "RACSignal.h"

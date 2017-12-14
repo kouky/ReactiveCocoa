@@ -8,6 +8,7 @@
 
 #import <Quick/Quick.h>
 #import <Nimble/Nimble.h>
+#import <Nimble/Nimble-Swift.h>
 
 #import "RACControlCommandExamples.h"
 
@@ -29,8 +30,8 @@ qck_describe(@"UIBarButtonItem", ^{
 		return @{
 			RACControlCommandExampleControl: button,
 			RACControlCommandExampleActivateBlock: ^(UIBarButtonItem *button) {
-				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[button.target methodSignatureForSelector:button.action]];
-				invocation.selector = button.action;
+				NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:(NSMethodSignature * _Nonnull)[button.target methodSignatureForSelector:button.action]];
+				invocation.selector = (SEL _Nonnull)button.action;
 
 				id target = button.target;
 				[invocation setArgument:&target atIndex:2];
